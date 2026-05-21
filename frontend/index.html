@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Instant Relief</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- HEADER -->
+    <h1>Instant Relief</h1>
+    <p class="subtitle">Turn overwhelm into a 2-minute action</p>
+
+    <!-- INPUT -->
+    <textarea id="input" placeholder="Describe your problem..."></textarea>
+    <button id="btn">Get Action Plan</button>
+
+    <!-- OUTPUT -->
+    <div class="output">
+
+      <!-- DO -->
+      <div class="card do">
+        <h3>DO</h3>
+        <p id="do">-</p>
+      </div>
+
+      <!-- DON'T -->
+      <div class="card dont">
+        <h3>DON'T</h3>
+        <p id="dont">-</p>
+      </div>
+
+      <!-- ACTION -->
+      <div class="card action">
+        <h3>⚡ ACTION</h3>
+        <p id="action">Your action will appear here</p>
+      </div>
+
+    </div>
+
+    <!-- FEEDBACK SECTION -->
+    <div class="feedback-box">
+
+      <h3>💬 Send Feedback</h3>
+      <p class="feedback-subtitle">
+        Tell me what helped or what felt confusing
+      </p>
+
+      <textarea
+        id="feedbackInput"
+        placeholder="Example: The action was helpful but the DO section was unclear..."
+      ></textarea>
+
+      <button id="sendFeedbackBtn">Send Feedback</button>
+
+      <p id="feedbackStatus"></p>
+
+    </div>
+
+  </div>
+
+  <!-- EMAILJS (if you use it) -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    emailjs.init("Jk87AbK71SSYywniw");
+  </script>
+
+  <!-- MAIN JS -->
+  <script src="script.js"></script>
+
+</body>
+</html>

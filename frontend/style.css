@@ -1,0 +1,158 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #0f172a;
+  color: #e5e7eb;
+  display: flex;
+  justify-content: center;
+  padding: 20px 12px;
+}
+
+.container {
+  width: 100%;
+  max-width: 700px;
+}
+
+/* HEADER */
+h1 {
+  font-size: 24px;
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  color: #94a3b8;
+  margin-bottom: 18px;
+  font-size: 14px;
+}
+
+/* INPUT */
+textarea {
+  width: 100%;
+  height: 100px;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  margin-bottom: 10px;
+  resize: none;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #3b82f6;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+button:hover {
+  background: #2563eb;
+}
+
+/* OUTPUT */
+.output {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* CARD BASE */
+.card {
+  padding: 12px;
+  border-radius: 12px;
+  background: #1e293b;
+}
+
+.card h3 {
+  margin-bottom: 6px;
+  font-size: 16px;
+}
+
+/* DO */
+.do {
+  border-left: 4px solid #3b82f6;
+}
+
+/* DON'T */
+.dont {
+  border-left: 4px solid #ef4444;
+}
+
+/* ACTION (MOST IMPORTANT) */
+.action {
+  border-left: 4px solid #22c55e;
+  background: rgba(34, 197, 94, 0.08);
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.15);
+}
+
+.action p {
+  font-size: 16px;
+  font-weight: bold;
+  color: #86efac;
+}
+
+/* FEEDBACK BOX */
+.feedback-box {
+  margin-top: 25px;
+  padding: 15px;
+  border-radius: 12px;
+  background: #1e293b;
+}
+
+.feedback-box h3 {
+  margin-bottom: 6px;
+}
+
+.feedback-subtitle {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-bottom: 10px;
+}
+
+.feedback-box textarea {
+  height: 90px;
+  margin-bottom: 10px;
+}
+
+#feedbackStatus {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #86efac;
+}
+
+/* MOBILE OPTIMIZATION */
+@media (max-width: 600px) {
+  body {
+    padding: 18px 10px;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  textarea {
+    height: 90px;
+  }
+
+  button {
+    font-size: 13px;
+  }
+
+  .card {
+    padding: 10px;
+  }
+
+  .action p {
+    font-size: 15px;
+  }
+}
