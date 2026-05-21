@@ -12,7 +12,7 @@ btn.addEventListener("click", async () => {
   actionEl.innerText = "Thinking...";
 
   try {
-    const res = await fetch("https://your-backend.onrender.com/api/relief", {
+    const res = await fetch("https://instant-relief.onrender.com/api/relief", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
