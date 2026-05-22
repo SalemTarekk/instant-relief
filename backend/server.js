@@ -8,20 +8,22 @@ const suggestionPrompt = require("./prompts/suggestionPrompt");
 
 const app = express();
 
+// ---------------------
+// MIDDLEWARE
+// ---------------------
 app.use(cors());
 app.use(express.json());
 
-/* -----------------------------
-   HEALTH CHECK
------------------------------- */
+// ---------------------
+// HEALTH CHECK
+// ---------------------
 app.get("/", (req, res) => {
   res.send("Server working");
 });
 
-/* -----------------------------
-   MAIN EXECUTION ENDPOINT
-   /api/relief
------------------------------- */
+// ---------------------
+// RELIEF ENDPOINT
+// ---------------------
 app.post("/api/relief", async (req, res) => {
   try {
     const userText = req.body.text;
@@ -31,14 +33,8 @@ app.post("/api/relief", async (req, res) => {
       {
         model: "openai/gpt-4o-mini",
         messages: [
-          {
-            role: "system",
-            content: executionPrompt
-          },
-          {
-            role: "user",
-            content: userText
-          }
+          { role: "system", content: executionPrompt },
+          { role: "user", content: userText }
         ]
       },
       {
@@ -50,8 +46,6 @@ app.post("/api/relief", async (req, res) => {
     );
 
     const content = response.data.choices[0].message.content;
-
-    let parsed;
 
     try {
       const cleaned = content
@@ -59,23 +53,20 @@ app.post("/api/relief", async (req, res) => {
         .replace(/```/g, "")
         .trim();
 
-      parsed = JSON.parse(cleaned);
+      return res.json(JSON.parse(cleaned));
     } catch (err) {
       console.log("RAW AI OUTPUT:", content);
 
       return res.json({
-        do: ["Open the task area"],
-        dont: ["Don't overthink"],
-        action: "Start with the smallest possible step"
+        do: ["Start small"],
+        dont: ["Avoid overthinking"],
+        action: "Do the first tiny step only"
       });
     }
-
-    res.json(parsed);
-
   } catch (error) {
-    console.error("Server error:", error.message);
+    console.error("Relief error:", error.message);
 
-    res.status(500).json({
+    return res.status(500).json({
       do: [],
       dont: [],
       action: "Server error"
@@ -83,10 +74,9 @@ app.post("/api/relief", async (req, res) => {
   }
 });
 
-/* -----------------------------
-   SUGGESTIONS ENDPOINT
-   /api/suggestions
------------------------------- */
+// ---------------------
+// SUGGESTIONS ENDPOINT
+// ---------------------
 app.get("/api/suggestions", async (req, res) => {
   try {
     const response = await axios.post(
@@ -94,10 +84,7 @@ app.get("/api/suggestions", async (req, res) => {
       {
         model: "openai/gpt-4o-mini",
         messages: [
-          {
-            role: "system",
-            content: suggestionPrompt
-          }
+          { role: "system", content: suggestionPrompt }
         ]
       },
       {
@@ -110,36 +97,36 @@ app.get("/api/suggestions", async (req, res) => {
 
     const content = response.data.choices[0].message.content;
 
-    let suggestions;
-
     try {
-      suggestions = JSON.parse(content);
+      const parsed = JSON.parse(content);
+      return res.json({ suggestions: parsed });
     } catch (err) {
       console.log("RAW SUGGESTIONS:", content);
 
-      suggestions = [
-        "I have an exam tomorrow but I still haven't started studying",
-        "I keep procrastinating instead of working",
-        "I feel overwhelmed and don't know where to begin",
-        "I waste time scrolling on my phone",
-        "I have too many tasks and feel stuck"
-      ];
+      return res.json({
+        suggestions: [
+          "I have an exam tomorrow but I haven't started",
+          "I keep procrastinating",
+          "I feel overwhelmed",
+          "I waste time on my phone",
+          "I don’t know where to start"
+        ]
+      });
     }
-
-    res.json({ suggestions });
-
   } catch (error) {
     console.error("Suggestions error:", error.message);
 
-    res.json({
+    return res.json({
       suggestions: []
     });
   }
 });
 
-/* -----------------------------
-   START SERVER
------------------------------- */
-app.listen(3000, () => {
-  console.log("Server running on http://localhost:3000");
+// ---------------------
+// START SERVER (IMPORTANT FIX)
+// ---------------------
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
