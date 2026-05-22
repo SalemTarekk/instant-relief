@@ -1,13 +1,17 @@
+const API_BASE = "https://instant-relief.onrender.com";
+
 const btn = document.getElementById("btn");
 
+const doEl = document.getElementById("do");
+const dontEl = document.getElementById("dont");
+const actionEl = document.getElementById("action");
+
+// ------------------------------
+// RELIEF ACTION
+// ------------------------------
 btn.addEventListener("click", async () => {
   const text = document.getElementById("input").value;
 
-  const doEl = document.getElementById("do");
-  const dontEl = document.getElementById("dont");
-  const actionEl = document.getElementById("action");
-
-  // ⚡ BUTTON FEEDBACK (NEW)
   btn.innerText = "Thinking...";
   btn.disabled = true;
 
@@ -16,11 +20,9 @@ btn.addEventListener("click", async () => {
   actionEl.innerText = "Thinking...";
 
   try {
-    const res = await fetch("https://instant-relief.onrender.com/api/relief", {
+    const res = await fetch(`${API_BASE}/api/relief`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text })
     });
 
@@ -33,20 +35,43 @@ btn.addEventListener("click", async () => {
   } catch (err) {
     doEl.innerText = "-";
     dontEl.innerText = "-";
-    actionEl.innerText = "Error connecting to server";
-    console.error(err);
+    actionEl.innerText = "Server error";
   }
 
-  // ⚡ RESET BUTTON (IMPORTANT)
-  btn.innerText = "Generate";
+  btn.innerText = "Get Action Plan";
   btn.disabled = false;
 });
 
 
 // ------------------------------
-// FEEDBACK (EMAILJS)
+// SUGGESTIONS (FIXED)
 // ------------------------------
+async function loadSuggestions() {
+  try {
+    const res = await fetch(`${API_BASE}/api/suggestions`);
+    const data = await res.json();
 
+    const container = document.getElementById("suggestions");
+
+    container.innerHTML = (data.suggestions || [])
+      .map(item => `<button onclick="fillInput('${item}')">${item}</button>`)
+      .join("");
+
+  } catch (err) {
+    console.log("Suggestions failed", err);
+  }
+}
+
+function fillInput(text) {
+  document.getElementById("input").value = text;
+}
+
+loadSuggestions();
+
+
+// ------------------------------
+// FEEDBACK
+// ------------------------------
 const sendBtn = document.getElementById("sendFeedbackBtn");
 
 sendBtn.addEventListener("click", async () => {
@@ -64,9 +89,7 @@ sendBtn.addEventListener("click", async () => {
     await emailjs.send(
       "service_rn89e0o",
       "template_80u0g9o",
-      {
-        message: feedback
-      }
+      { message: feedback }
     );
 
     status.innerText = "Thanks! Feedback sent 🙌";
@@ -74,6 +97,5 @@ sendBtn.addEventListener("click", async () => {
 
   } catch (err) {
     status.innerText = "Failed to send feedback.";
-    console.error(err);
   }
 });

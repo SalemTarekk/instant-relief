@@ -10,30 +10,27 @@
 
   <div class="container">
 
-    <!-- HEADER -->
     <h1>Instant Relief</h1>
     <p class="subtitle">Tell me what’s stressing you — I’ll give you a simple action</p>
 
-    <!-- INPUT -->
+    <!-- 🔥 AI SUGGESTIONS -->
+    <div id="suggestions" class="suggestions"></div>
+
     <textarea id="input" placeholder="Example: I have a history exam tomorrow but I keep procrastinating..."></textarea>
     <button id="btn">Get Action Plan</button>
 
-    <!-- OUTPUT -->
     <div class="output">
 
-      <!-- DO -->
       <div class="card do">
         <h3>DO</h3>
         <p id="do">-</p>
       </div>
 
-      <!-- DON'T -->
       <div class="card dont">
         <h3>DON'T</h3>
         <p id="dont">-</p>
       </div>
 
-      <!-- ACTION -->
       <div class="card action">
         <h3>⚡ ACTION</h3>
         <p id="action">Your action will appear here</p>
@@ -41,35 +38,22 @@
 
     </div>
 
-    <!-- FEEDBACK SECTION -->
     <div class="feedback-box">
-
       <h3>💬 Send Feedback</h3>
-      <p class="feedback-subtitle">
-        Tell me what helped or what felt confusing
-      </p>
+      <p class="feedback-subtitle">Tell me what helped or what felt confusing</p>
 
-      <textarea
-        id="feedbackInput"
-        placeholder="Example: The action was helpful but the DO section was unclear..."
-      ></textarea>
-
+      <textarea id="feedbackInput" placeholder="Write feedback..."></textarea>
       <button id="sendFeedbackBtn">Send Feedback</button>
-
       <p id="feedbackStatus"></p>
-
     </div>
 
   </div>
 
-  <!-- EMAILJS (if you use it) -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
     emailjs.init("Jk87AbK71SSYywniw");
   </script>
 
-  <!-- MAIN JS -->
   <script src="script.js"></script>
-  <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
