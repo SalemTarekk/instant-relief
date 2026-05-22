@@ -7,6 +7,10 @@ btn.addEventListener("click", async () => {
   const dontEl = document.getElementById("dont");
   const actionEl = document.getElementById("action");
 
+  // ⚡ BUTTON FEEDBACK (NEW)
+  btn.innerText = "Thinking...";
+  btn.disabled = true;
+
   doEl.innerText = "Loading...";
   dontEl.innerText = "Loading...";
   actionEl.innerText = "Thinking...";
@@ -32,6 +36,10 @@ btn.addEventListener("click", async () => {
     actionEl.innerText = "Error connecting to server";
     console.error(err);
   }
+
+  // ⚡ RESET BUTTON (IMPORTANT)
+  btn.innerText = "Generate";
+  btn.disabled = false;
 });
 
 
