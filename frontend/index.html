@@ -10,15 +10,26 @@
 
   <div class="container">
 
-    <h1>Instant Relief</h1>
-    <p class="subtitle">Tell me what’s stressing you — I’ll give you a simple action</p>
+    <button id="themeToggle">🌙 Toggle Theme</button>
 
-    <!-- 🔥 AI SUGGESTIONS -->
+    <h1>Instant Relief</h1>
+
+    <p class="subtitle">
+      Tell me what’s stressing you — I’ll give you a simple action
+    </p>
+
+    <!-- SUGGESTIONS -->
     <div id="suggestions" class="suggestions"></div>
 
-    <textarea id="input" placeholder="Example: I have a history exam tomorrow but I keep procrastinating..."></textarea>
+    <!-- INPUT -->
+    <textarea
+      id="input"
+      placeholder="Example: I have a history exam tomorrow but I keep procrastinating..."
+    ></textarea>
+
     <button id="btn">Get Action Plan</button>
 
+    <!-- OUTPUT -->
     <div class="output">
 
       <div class="card do">
@@ -38,22 +49,52 @@
 
     </div>
 
-    <div class="feedback-box">
-      <h3>💬 Send Feedback</h3>
-      <p class="feedback-subtitle">Tell me what helped or what felt confusing</p>
+    <!-- FOLLOW-UP -->
+    <div class="followup-box">
+      <button id="smallerStepBtn">Smaller Step</button>
+      <button id="stuckBtn">Still Stuck</button>
+    </div>
 
-      <textarea id="feedbackInput" placeholder="Write feedback..."></textarea>
+    <div class="card followup-card">
+      <h3>FOLLOW-UP</h3>
+      <p id="followupText">-</p>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="history-box">
+      <h3>🕘 Previous Sessions</h3>
+      <div id="history"></div>
+    </div>
+
+    <!-- FEEDBACK -->
+    <div class="feedback-box">
+
+      <h3>💬 Send Feedback</h3>
+
+      <p class="feedback-subtitle">
+        Tell me what helped or what felt confusing
+      </p>
+
+      <textarea
+        id="feedbackInput"
+        placeholder="Write feedback..."
+      ></textarea>
+
       <button id="sendFeedbackBtn">Send Feedback</button>
+
       <p id="feedbackStatus"></p>
+
     </div>
 
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
   <script>
     emailjs.init("Jk87AbK71SSYywniw");
   </script>
 
   <script src="script.js"></script>
+
 </body>
 </html>

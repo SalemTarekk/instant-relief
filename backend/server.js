@@ -5,6 +5,7 @@ require("dotenv").config();
 
 const executionPrompt = require("./prompts/executionPrompt");
 const suggestionPrompt = require("./prompts/suggestionPrompt");
+const followupPrompt = require("./prompts/followupPrompt");
 
 const app = express();
 
@@ -33,8 +34,14 @@ app.post("/api/relief", async (req, res) => {
       {
         model: "openai/gpt-4o-mini",
         messages: [
-          { role: "system", content: executionPrompt },
-          { role: "user", content: userText }
+          {
+            role: "system",
+            content: executionPrompt
+          },
+          {
+            role: "user",
+            content: userText
+          }
         ]
       },
       {
@@ -54,6 +61,7 @@ app.post("/api/relief", async (req, res) => {
         .trim();
 
       return res.json(JSON.parse(cleaned));
+
     } catch (err) {
       console.log("RAW AI OUTPUT:", content);
 
@@ -63,6 +71,7 @@ app.post("/api/relief", async (req, res) => {
         action: "Do the first tiny step only"
       });
     }
+
   } catch (error) {
     console.error("Relief error:", error.message);
 
@@ -84,7 +93,10 @@ app.get("/api/suggestions", async (req, res) => {
       {
         model: "openai/gpt-4o-mini",
         messages: [
-          { role: "system", content: suggestionPrompt }
+          {
+            role: "system",
+            content: suggestionPrompt
+          }
         ]
       },
       {
@@ -99,7 +111,11 @@ app.get("/api/suggestions", async (req, res) => {
 
     try {
       const parsed = JSON.parse(content);
-      return res.json({ suggestions: parsed });
+
+      return res.json({
+        suggestions: parsed
+      });
+
     } catch (err) {
       console.log("RAW SUGGESTIONS:", content);
 
@@ -113,6 +129,7 @@ app.get("/api/suggestions", async (req, res) => {
         ]
       });
     }
+
   } catch (error) {
     console.error("Suggestions error:", error.message);
 
@@ -123,7 +140,60 @@ app.get("/api/suggestions", async (req, res) => {
 });
 
 // ---------------------
-// START SERVER (IMPORTANT FIX)
+// FOLLOW-UP ENDPOINT
+// ---------------------
+app.post("/api/followup", async (req, res) => {
+  try {
+    const { text, currentAction } = req.body;
+
+    const response = await axios.post(
+      "https://openrouter.ai/api/v1/chat/completions",
+      {
+        model: "openai/gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content: followupPrompt
+          },
+          {
+            role: "user",
+            content: `
+User problem:
+${text}
+
+Current action:
+${currentAction}
+
+User clicked follow-up help.
+`
+          }
+        ]
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    const content = response.data.choices[0].message.content;
+
+    res.json({
+      reply: content
+    });
+
+  } catch (error) {
+    console.error("Followup error:", error.message);
+
+    res.json({
+      reply: "Take an even smaller step."
+    });
+  }
+});
+
+// ---------------------
+// START SERVER
 // ---------------------
 const PORT = process.env.PORT || 3000;
 
