@@ -1,71 +1,65 @@
-const btn = document.getElementById("btn");
+const input = document.getElementById("userInput");
+const button = document.getElementById("generateBtn");
+const output = document.getElementById("output");
 
-btn.addEventListener("click", async () => {
-  const text = document.getElementById("input").value;
+button.addEventListener("click", async () => {
+  const text = input.value.trim();
+  if (!text) return;
 
-  const doEl = document.getElementById("do");
-  const dontEl = document.getElementById("dont");
-  const actionEl = document.getElementById("action");
+  // INSTANT FEEDBACK
+  button.innerText = "Thinking...";
+  button.disabled = true;
 
-  doEl.innerText = "Loading...";
-  dontEl.innerText = "Loading...";
-  actionEl.innerText = "Thinking...";
+  output.innerHTML = `
+    <div class="card do">DO: analyzing...</div>
+    <div class="card dont">DON'T: filtering distractions...</div>
+    <div class="card action">ACTION: thinking...</div>
+  `;
+
+  // MICRO LOADING (INSIDE FUNCTION)
+  setTimeout(() => {
+    const actionBox = document.querySelector(".action");
+    if (actionBox) actionBox.innerText = "ACTION: building your plan...";
+  }, 400);
 
   try {
     const res = await fetch("https://instant-relief.onrender.com/api/relief", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ text })
     });
 
     const data = await res.json();
 
-    doEl.innerText = data.do || "-";
-    dontEl.innerText = data.dont || "-";
-    actionEl.innerText = data.action || "No action returned";
+    // FINAL RESULT
+    output.innerHTML = `
+      <div class="card do">
+        <h3>DO</h3>
+        <p>${data.do}</p>
+      </div>
+
+      <div class="card dont">
+        <h3>DON'T</h3>
+        <p>${data.dont}</p>
+      </div>
+
+      <div class="card action">
+        <h3>ACTION</h3>
+        <p>${data.action}</p>
+      </div>
+    `;
 
   } catch (err) {
-    doEl.innerText = "-";
-    dontEl.innerText = "-";
-    actionEl.innerText = "Error connecting to server";
-    console.error(err);
-  }
-});
-
-
-// ------------------------------
-// FEEDBACK (EMAILJS)
-// ------------------------------
-
-const sendBtn = document.getElementById("sendFeedbackBtn");
-
-sendBtn.addEventListener("click", async () => {
-  const feedback = document.getElementById("feedbackInput").value;
-  const status = document.getElementById("feedbackStatus");
-
-  if (!feedback.trim()) {
-    status.innerText = "Please write feedback first.";
-    return;
+    output.innerHTML = `
+      <div class="card dont">
+        Error. Try again.
+      </div>
+    `;
   }
 
-  status.innerText = "Sending...";
-
-  try {
-    await emailjs.send(
-      "service_rn89e0o",
-      "template_80u0g9o",
-      {
-        message: feedback
-      }
-    );
-
-    status.innerText = "Thanks! Feedback sent 🙌";
-    document.getElementById("feedbackInput").value = "";
-
-  } catch (err) {
-    status.innerText = "Failed to send feedback.";
-    console.error(err);
-  }
+  // RESET BUTTON
+  button.innerText = "Generate";
+  button.disabled = false;
 });
