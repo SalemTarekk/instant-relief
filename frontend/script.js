@@ -1,10 +1,15 @@
 const API_BASE = "https://instant-relief.onrender.com";
 
+// ------------------------------
+// ELEMENTS
+// ------------------------------
 const btn = document.getElementById("btn");
 
 const doEl = document.getElementById("do");
 const dontEl = document.getElementById("dont");
 const actionEl = document.getElementById("action");
+
+const suggestionsContainer = document.getElementById("suggestions");
 
 // ------------------------------
 // RELIEF ACTION
@@ -22,7 +27,9 @@ btn.addEventListener("click", async () => {
   try {
     const res = await fetch(`${API_BASE}/api/relief`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({ text })
     });
 
@@ -33,6 +40,7 @@ btn.addEventListener("click", async () => {
     actionEl.innerText = data.action || "No action returned";
 
   } catch (err) {
+    console.error(err);
     doEl.innerText = "-";
     dontEl.innerText = "-";
     actionEl.innerText = "Server error";
@@ -44,33 +52,37 @@ btn.addEventListener("click", async () => {
 
 
 // ------------------------------
-// SUGGESTIONS (FIXED)
+// SUGGESTIONS
 // ------------------------------
 async function loadSuggestions() {
   try {
     const res = await fetch(`${API_BASE}/api/suggestions`);
     const data = await res.json();
 
-    const container = document.getElementById("suggestions");
+    suggestionsContainer.innerHTML = "";
 
-    container.innerHTML = (data.suggestions || [])
-      .map(item => `<button onclick="fillInput('${item}')">${item}</button>`)
-      .join("");
+    (data.suggestions || []).forEach(item => {
+      const btn = document.createElement("button");
+      btn.innerText = item;
+
+      btn.addEventListener("click", () => {
+        document.getElementById("input").value = item;
+      });
+
+      suggestionsContainer.appendChild(btn);
+    });
 
   } catch (err) {
-    console.log("Suggestions failed", err);
+    console.error("Suggestions failed:", err);
   }
 }
 
-function fillInput(text) {
-  document.getElementById("input").value = text;
-}
-
+// Load on page start
 loadSuggestions();
 
 
 // ------------------------------
-// FEEDBACK
+// FEEDBACK (EMAILJS)
 // ------------------------------
 const sendBtn = document.getElementById("sendFeedbackBtn");
 
@@ -89,13 +101,16 @@ sendBtn.addEventListener("click", async () => {
     await emailjs.send(
       "service_rn89e0o",
       "template_80u0g9o",
-      { message: feedback }
+      {
+        message: feedback
+      }
     );
 
     status.innerText = "Thanks! Feedback sent 🙌";
     document.getElementById("feedbackInput").value = "";
 
   } catch (err) {
+    console.error(err);
     status.innerText = "Failed to send feedback.";
   }
 });
