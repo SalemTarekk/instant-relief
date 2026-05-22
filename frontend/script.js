@@ -1,70 +1,71 @@
-const input = document.getElementById("userInput");
-const button = document.getElementById("generateBtn");
-const output = document.getElementById("output");
+const btn = document.getElementById("btn");
 
-button.addEventListener("click", async () => {
-  const text = input.value.trim();
+btn.addEventListener("click", async () => {
+  const text = document.getElementById("input").value;
 
-  if (!text) return;
+  const doEl = document.getElementById("do");
+  const dontEl = document.getElementById("dont");
+  const actionEl = document.getElementById("action");
 
-  // 1. INSTANT FEEDBACK (IMPORTANT FOR SPEED PERCEPTION)
-  button.innerText = "Generating...";
-  button.disabled = true;
-
-  output.innerHTML = `
-    <div class="card do">DO: understanding situation...</div>
-    <div class="card dont">DON'T: filtering distractions...</div>
-    <div class="card action">ACTION: thinking...</div>
-  `;
-
-  // 2. MICRO LOADING EVOLUTION (FEELS FAST)
-  setTimeout(() => {
-    document.querySelector(".action").innerText = "ACTION: analyzing problem...";
-  }, 300);
-
-  setTimeout(() => {
-    document.querySelector(".action").innerText = "ACTION: building your plan...";
-  }, 700);
+  doEl.innerText = "Loading...";
+  dontEl.innerText = "Loading...";
+  actionEl.innerText = "Thinking...";
 
   try {
-    // 3. CALL BACKEND
     const res = await fetch("https://instant-relief.onrender.com/api/relief", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
-      body: JSON.stringify({ text }),
+      body: JSON.stringify({ text })
     });
 
     const data = await res.json();
 
-    // 4. FINAL RESULT (REPLACE UI)
-    output.innerHTML = `
-      <div class="card do">
-        <h3>DO</h3>
-        <p>${data.do}</p>
-      </div>
-
-      <div class="card dont">
-        <h3>DON'T</h3>
-        <p>${data.dont}</p>
-      </div>
-
-      <div class="card action">
-        <h3>ACTION (2 MIN)</h3>
-        <p>${data.action}</p>
-      </div>
-    `;
+    doEl.innerText = data.do || "-";
+    dontEl.innerText = data.dont || "-";
+    actionEl.innerText = data.action || "No action returned";
 
   } catch (err) {
-    output.innerHTML = `
-      <div class="card dont">
-        Something went wrong. Try again.
-      </div>
-    `;
+    doEl.innerText = "-";
+    dontEl.innerText = "-";
+    actionEl.innerText = "Error connecting to server";
+    console.error(err);
+  }
+});
+
+
+// ------------------------------
+// FEEDBACK (EMAILJS)
+// ------------------------------
+
+const sendBtn = document.getElementById("sendFeedbackBtn");
+
+sendBtn.addEventListener("click", async () => {
+  const feedback = document.getElementById("feedbackInput").value;
+  const status = document.getElementById("feedbackStatus");
+
+  if (!feedback.trim()) {
+    status.innerText = "Please write feedback first.";
+    return;
   }
 
-  // 5. RESET BUTTON
-  button.innerText = "Generate";
-  button.disabled = false;
+  status.innerText = "Sending...";
+
+  try {
+    await emailjs.send(
+      "service_rn89e0o",
+      "template_80u0g9o",
+      {
+        message: feedback
+      }
+    );
+
+    status.innerText = "Thanks! Feedback sent 🙌";
+    document.getElementById("feedbackInput").value = "";
+
+  } catch (err) {
+    status.innerText = "Failed to send feedback.";
+    console.error(err);
+  }
 });
