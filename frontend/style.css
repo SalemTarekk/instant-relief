@@ -1,3 +1,4 @@
+/* RESET */
 * {
   margin: 0;
   padding: 0;
@@ -19,6 +20,7 @@ body {
   max-width: 700px;
 }
 
+/* TEXT */
 h1 {
   font-size: 28px;
   margin-bottom: 6px;
@@ -30,33 +32,29 @@ h1 {
   font-size: 14px;
 }
 
+/* BUTTONS */
+button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: #3b82f6;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #2563eb;
+}
+
 /* THEME BUTTON */
 #themeToggle {
   margin-bottom: 15px;
   background: #334155;
-}
-
-/* SUGGESTIONS */
-.suggestions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.suggestions button {
-  background: #1e293b;
-  color: #cbd5e1;
-  border: 1px solid #334155;
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.suggestions button:hover {
-  background: #334155;
-  color: white;
 }
 
 /* INPUT */
@@ -72,24 +70,6 @@ textarea {
   resize: none;
 }
 
-/* BUTTONS */
-button {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  background: #3b82f6;
-  color: white;
-  font-size: 14px;
-  cursor: pointer;
-  margin-bottom: 20px;
-  transition: 0.2s;
-}
-
-button:hover {
-  background: #2563eb;
-}
-
 /* OUTPUT */
 .output {
   display: flex;
@@ -102,6 +82,7 @@ button:hover {
   padding: 12px;
   border-radius: 12px;
   background: #1e293b;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
 .card h3 {
@@ -140,15 +121,11 @@ button:hover {
 .followup-box button {
   flex: 1;
   background: #334155;
+  font-weight: normal;
 }
 
 .followup-box button:hover {
   background: #475569;
-}
-
-.followup-card {
-  margin-top: 12px;
-  border-left: 4px solid #f59e0b;
 }
 
 /* HISTORY */
@@ -190,25 +167,6 @@ button:hover {
   margin-top: 10px;
   font-size: 13px;
   color: #86efac;
-}
-
-/* LOADING */
-.loading {
-  animation: pulse 1s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 0.4;
-  }
-
-  50% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0.4;
-  }
 }
 
 /* LIGHT MODE */
